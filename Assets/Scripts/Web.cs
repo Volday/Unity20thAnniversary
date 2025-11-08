@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 public class Web : MonoBehaviour
 {
@@ -92,8 +90,8 @@ public class Web : MonoBehaviour
         }
     }
 
-    public Joint CreateJoint(Vector2 position, bool isStatic) 
-    { 
+    public Joint CreateJoint(Vector2 position, bool isStatic)
+    {
         var joint = new Joint() { position = position, isStatic = isStatic };
         joints.Add(joint);
         return joint;
@@ -129,8 +127,8 @@ public class Web : MonoBehaviour
         }
     }
 
-    public void InsertJoint(Connection connection, Joint joint) 
-    { 
+    public void InsertJoint(Connection connection, Joint joint)
+    {
         var firstJoint = joints[connection.first];
         var secondJoint = joints[connection.second];
         RemoveConnection(connection);
@@ -138,8 +136,8 @@ public class Web : MonoBehaviour
         TryCrateConnction(secondJoint, joint, out var secondConnection);
     }
 
-    public void RemoveConnection(Connection connection) 
-    { 
+    public void RemoveConnection(Connection connection)
+    {
         connections.Remove(connection);
     }
 
@@ -153,7 +151,8 @@ public class Web : MonoBehaviour
             return false;
         }
         var newConnection = new Connection(firstIndex, secondIndex);
-        if (connections.Any(c => c.Equals(newConnection))) {
+        if (connections.Any(c => c.Equals(newConnection)))
+        {
             return false;
         }
         connection = newConnection;
@@ -197,15 +196,25 @@ public class Web : MonoBehaviour
             .ToList();
     }
 
+    public bool IsConnectionExist(Connection connection)
+    {
+        return connections.Contains(connection);
+    }
+
+    public bool IsConnectionStatic(Connection connection)
+    {
+        var firstJoint = joints[connection.first];
+        var secondJoint = joints[connection.second];
+        return firstJoint.isStatic && secondJoint.isStatic;
+    }
+
     public Connection GetClosestConnection(Vector2 point, out Vector2 projection)
     {
         projection = Vector2.zero;
         Connection closest = null;
         foreach (var connection in connections)
         {
-            var firstJoint = joints[connection.first];
-            var secondJoint = joints[connection.second];
-            var projectionOnLineSegment = WebUtils.GetClosestPointOnLineSegment(firstJoint.position, secondJoint.position, point);
+            var projectionOnLineSegment = GetClosestPointOnConnection(connection, point);
             if (closest == null ||
                 (projectionOnLineSegment - point).sqrMagnitude < (projection - point).sqrMagnitude)
             {
@@ -216,6 +225,31 @@ public class Web : MonoBehaviour
         return closest;
     }
 
+    public Vector2 GetClosestPointOnConnection(Connection connection, Vector2 point)
+    {
+        var firstJoint = joints[connection.first];
+        var secondJoint = joints[connection.second];
+        return WebUtils.GetClosestPointOnLineSegment(firstJoint.position, secondJoint.position, point);
+    }
+
+    public Vector2 PushFromStaticConnections(Vector2 point, float minDistance)
+    {
+        foreach (var connection in connections)
+        {
+            if (!IsConnectionStatic(connection))
+            {
+                continue;
+            }
+            var projection = GetClosestPointOnConnection(connection, point);
+            var vector = point - projection;
+            if (vector.magnitude < minDistance) {
+                vector = vector.normalized * minDistance;
+            }
+            point = projection + vector;
+        }
+        return point;
+    }
+
     private void OnDrawGizmos()
     {
         if (connections != null)
@@ -223,6 +257,14 @@ public class Web : MonoBehaviour
             for (int i = 0; i < connections.Count; i++)
             {
                 var connection = connections[i];
+                if (IsConnectionStatic(connection))
+                {
+                    Gizmos.color = new Color(0.8f, 0.8f, 0.8f);
+                }
+                else
+                {
+                    Gizmos.color = Color.white;
+                }
                 Gizmos.DrawLine(joints[connection.first].position, joints[connection.second].position);
             }
         }

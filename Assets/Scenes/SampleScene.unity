@@ -164,28 +164,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   joints:
-  - position: {x: -1.0558, y: 0.98909026}
+  - position: {x: -1.9938273, y: 2.0945613}
     velocity: {x: 0, y: 0}
     isStatic: 1
-  - position: {x: -0.2902103, y: 0.007311672}
+  - position: {x: -0.93926835, y: 0.12874478}
     velocity: {x: 0, y: 0}
     isStatic: 0
-  - position: {x: -1.3020818, y: -0.94610536}
+  - position: {x: -2.26966, y: -1.8862432}
     velocity: {x: 0, y: 0}
     isStatic: 1
-  - position: {x: 0.6071162, y: 0.048363693}
+  - position: {x: 1.1889309, y: 0.06979252}
     velocity: {x: 0, y: 0}
     isStatic: 0
-  - position: {x: 1.1788688, y: 1.085645}
+  - position: {x: 1.7833055, y: 1.8956302}
     velocity: {x: 0, y: 0}
     isStatic: 1
-  - position: {x: 1.2100426, y: -1.0700018}
+  - position: {x: 2.0803525, y: -1.9577553}
     velocity: {x: 0, y: 0}
     isStatic: 1
-  - position: {x: 0.14149895, y: -0.5989859}
+  - position: {x: 0.2316108, y: -1.0520254}
     velocity: {x: 0, y: 0}
     isStatic: 0
-  - position: {x: 0.6352076, y: -0.7745976}
+  - position: {x: 1.228698, y: -1.4254816}
+    velocity: {x: 0, y: 0}
+    isStatic: 0
+  - position: {x: 0.01589179, y: 2.739569}
+    velocity: {x: 0, y: 0}
+    isStatic: 1
+  - position: {x: -3.4278226, y: 0.49185663}
+    velocity: {x: 0, y: 0}
+    isStatic: 1
+  - position: {x: 0.12471151, y: -3.0186424}
+    velocity: {x: 0, y: 0}
+    isStatic: 1
+  - position: {x: 3.2681324, y: -0.046491593}
+    velocity: {x: 0, y: 0}
+    isStatic: 1
+  - position: {x: 0.2105583, y: 1.5698767}
+    velocity: {x: 0, y: 0}
+    isStatic: 0
+  - position: {x: -0.88829064, y: -1.6016207}
+    velocity: {x: 0, y: 0}
+    isStatic: 0
+  - position: {x: -2.9502032, y: 0.41618165}
     velocity: {x: 0, y: 0}
     isStatic: 0
   connections:
@@ -205,6 +226,42 @@ MonoBehaviour:
     second: 2
   - first: 3
     second: 7
+  - first: 4
+    second: 8
+  - first: 8
+    second: 0
+  - first: 0
+    second: 9
+  - first: 9
+    second: 2
+  - first: 5
+    second: 10
+  - first: 10
+    second: 2
+  - first: 5
+    second: 11
+  - first: 11
+    second: 4
+  - first: 3
+    second: 12
+  - first: 12
+    second: 0
+  - first: 12
+    second: 8
+  - first: 1
+    second: 13
+  - first: 13
+    second: 10
+  - first: 13
+    second: 2
+  - first: 3
+    second: 11
+  - first: 9
+    second: 14
+  - first: 14
+    second: 0
+  - first: 14
+    second: 2
   stiffness: 50
   damping: 2
   airResistance: 1
@@ -489,6 +546,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &571733127 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4071592558325627480, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+  m_PrefabInstance: {fileID: 1615802119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,9 +722,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 303916588}
     - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
-      propertyPath: distanceToHoldWeb
-      value: 0.2
-      objectReference: {fileID: 0}
+      propertyPath: 'legs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1938630501}
+    - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: 'legs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 571733127}
+    - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: 'legs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1785971008}
+    - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: 'legs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1849864689}
     - target: {fileID: 3952918446927074023, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_Name
       value: SpiderMine
@@ -734,6 +808,21 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40694183cef852946a4713a37b36d6d3, type: 3}
+--- !u!4 &1785971008 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3986362127641404886, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+  m_PrefabInstance: {fileID: 1615802119}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1849864689 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4554492245880449968, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+  m_PrefabInstance: {fileID: 1615802119}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1938630501 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9212677189981919478, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+  m_PrefabInstance: {fileID: 1615802119}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

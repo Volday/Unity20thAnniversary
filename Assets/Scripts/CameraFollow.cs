@@ -4,7 +4,7 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform target;
 
-    void Update()
+    void LateUpdate()
     {
         if (target != null)
         {
