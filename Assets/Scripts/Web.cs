@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Web : MonoBehaviour
 {
-    [SerializeField]
+    [HideInInspector]
     public List<Joint> joints;
-    [SerializeField]
+    [HideInInspector]
     public List<Connection> connections;
 
     public float stiffness = 100;
@@ -21,6 +21,11 @@ public class Web : MonoBehaviour
 
     public List<IWebWeightProvider> webWeightProviders;
 
+    private void Awake()
+    {
+        webWeightProviders = new List<IWebWeightProvider>();
+    }
+
     private void Start()
     {
         foreach (var con in connections)
@@ -30,7 +35,6 @@ public class Web : MonoBehaviour
             var length = (firstJoint.position - secondJoint.position).magnitude;
             con.SetLength(length);
         }
-        webWeightProviders = new List<IWebWeightProvider>();
     }
 
     private void FixedUpdate()
@@ -262,6 +266,56 @@ public class Web : MonoBehaviour
             point = projection + vector;
         }
         return point;
+    }
+
+    public bool TryConnect(Connection startConnection, Vector2 startPosition, Vector2 direction, float minDistance)
+    {
+        if (IsConnectionStatic(startConnection))
+        {
+            startPosition = GetClosestPointOnConnection(startConnection, startPosition);
+        }
+
+        Connection closestConnection = null;
+        var closestPosition = Vector2.zero;
+        foreach (var connection in connections)
+        {
+            if (connection == startConnection)
+            {
+                continue;
+            }
+            var firstJoint = joints[connection.first];
+            var secondJoint = joints[connection.second];
+            if (WebUtils.SegmentRayIntersection(
+                firstJoint.position,
+                secondJoint.position,
+                startPosition,
+                direction,
+                out var position))
+            {
+                var distance = (position - startPosition).magnitude;
+                if (distance < minDistance)
+                {
+                    continue;
+                }
+                var bestDistance = (closestPosition - startPosition).magnitude;
+                if (closestConnection == null ||
+                    distance < bestDistance)
+                {
+                    closestConnection = connection;
+                    closestPosition = position;
+                }
+            }
+        }
+        if (closestConnection == null)
+        {
+            return false;
+        }
+        var startJoint = CreateJoint(startPosition, IsConnectionStatic(startConnection));
+        InsertJoint(startConnection, startJoint);
+        var endJoint = CreateJoint(closestPosition, IsConnectionStatic(closestConnection));
+        InsertJoint(closestConnection, endJoint);
+        TryCrateConnction(startJoint, endJoint, out _);
+        return true;
     }
 
     private void OnDrawGizmos()

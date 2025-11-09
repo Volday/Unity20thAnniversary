@@ -11,8 +11,9 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
 
     public InputActionAsset inputActions;
     private InputAction moveAction;
-    private InputAction lookAction;
+    private InputAction attackAction;
 
+    public Transform directionMarker;
     public Transform spiderBody;
     public List<Leg> legs;
     private Dictionary<Leg, Vector3> defaultLocalLegPosition;
@@ -38,7 +39,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         respawnPosition = transform.position;
         inputActions.FindActionMap("Player").Enable();
         moveAction = InputSystem.actions.FindAction("Move");
-        lookAction = InputSystem.actions.FindAction("Look");
+        attackAction = InputSystem.actions.FindAction("Attack");
 
         defaultLocalLegPosition = new();
         foreach (var leg in legs)
@@ -53,6 +54,18 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     void Update()
     {
         moveVector = moveAction.ReadValue<Vector2>();
+
+        var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        var plane = new Plane(Vector3.back, Vector3.zero);
+        plane.Raycast(ray, out var dist);
+        var aimPosition = ray.origin + ray.direction * dist;
+        directionMarker.LookAt(aimPosition);
+        if (attackAction.WasPressedThisFrame() &&
+            web.IsConnectionExist(holdingConnection))
+        {
+            var aimVector = (aimPosition - transform.position).normalized;
+            web.TryConnect(holdingConnection, transform.position, aimVector, 0.3f);
+        }
     }
 
     private void FixedUpdate()
