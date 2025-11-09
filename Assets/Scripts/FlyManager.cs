@@ -16,14 +16,14 @@ public class FlyManager : MonoBehaviour
     private void Start()
     {
         initialFlghtsPerMinute = flghtsPerMinute;
-        flghtsPerMinute *= 2;
+        flghtsPerMinute *= 3f;
         LaunchFly(new Vector3(-6.84f, -1.745f, 0f));
         StartCoroutine(FlyLouncherCoroutine());
     }
 
     private void Update()
     {
-        flghtsPerMinute -= (initialFlghtsPerMinute / 60f) * Time.deltaTime;
+        flghtsPerMinute -= (initialFlghtsPerMinute / 90f) * Time.deltaTime;
         flghtsPerMinute = Mathf.Max(flghtsPerMinute, initialFlghtsPerMinute);
     }
 
@@ -60,7 +60,7 @@ public class FlyManager : MonoBehaviour
             var row = fields.GetChild(i);
             for (int j = 0; j < row.childCount; j++)
             {
-                points.Add(row.GetChild(i).transform.position);
+                points.Add(row.GetChild(j).transform.position);
             }
         }
     }

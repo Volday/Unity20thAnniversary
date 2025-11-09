@@ -116,7 +116,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
             webAmount -= (transform.position - (Vector3)endPosition).magnitude * webUsedPerMeter;
         }
 
-        webResDecayTime -= ((webResDecayTime * 0.3f) / 60f) * Time.deltaTime;
+        webResDecayTime -= ((webResDecayTime * 0.5f) / 60f) * Time.deltaTime;
         webResDecayTime = Mathf.Max(webResDecayTime, 0.01f);
         webAmount -= (1 / webResDecayTime) * Time.deltaTime;
         TryEatFly();
@@ -151,7 +151,8 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         {
             closestFlyMarker.gameObject.SetActive(false);
         }
-        else {
+        else
+        {
             closestFlyMarker.gameObject.SetActive(true);
             closestFlyVector = (closestFly.transform.position - closestFlyMarker.position).normalized;
         }
