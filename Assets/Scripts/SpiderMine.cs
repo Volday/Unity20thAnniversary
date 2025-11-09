@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -73,9 +72,10 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         if (webAmount == 0)
         {
             moveVector = Vector3.Slerp(moveVector, Vector3.zero, Time.deltaTime);
-            if (timePlayed == -1) {
+            if (timePlayed == -1)
+            {
                 timePlayed = (int)Time.timeSinceLevelLoad;
-                endGameText.text = $"Out of web.\nYou lived for {timePlayed} secconds";
+                endGameText.text = $"Out of web.\nYou lived for {timePlayed} seconds";
             }
             reloadingTime += Time.deltaTime;
             var panelColor = endGameScreen.color;
@@ -230,7 +230,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     public bool TryGetPositionAndWightForConnection(Connection connection, out Vector2 position, out float weight)
     {
         position = Vector2.zero;
-        weight = 10;
+        weight = 5;
         if (connection != holdingConnection)
         {
             return false;
