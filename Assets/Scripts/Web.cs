@@ -19,6 +19,8 @@ public class Web : MonoBehaviour
 
     public int iterationCount;
 
+    public List<IWebWeightProvider> webWeightProviders;
+
     private void Start()
     {
         foreach (var con in connections)
@@ -28,6 +30,7 @@ public class Web : MonoBehaviour
             var length = (firstJoint.position - secondJoint.position).magnitude;
             con.SetLength(length);
         }
+        webWeightProviders = new List<IWebWeightProvider>();
     }
 
     private void FixedUpdate()
@@ -41,7 +44,7 @@ public class Web : MonoBehaviour
     private void UpdateWeb(float deltaTime)
     {
         var forces = new Vector2[joints.Count];
-        var masses = new float[joints.Count];
+        var masses = Enumerable.Repeat(1f, joints.Count).ToArray();
 
         foreach (var con in connections)
         {
@@ -66,13 +69,23 @@ public class Web : MonoBehaviour
             {
                 forces[con.second] -= force * (firstJoint.isStatic ? 2 : 1);
             }
+
+            foreach (var weightProvider in webWeightProviders)
+            {
+                if (weightProvider.TryGetPositionAndWightForConnection(con, out var position, out float weight))
+                {
+                    var coefficient = (firstJoint.position - position).magnitude / length;
+                    masses[con.first] += weight * (1 - coefficient);
+                    masses[con.second] += weight * coefficient;
+                }
+            }
         }
 
         for (int i = 0; i < joints.Count; i++)
         {
             var joint = joints[i];
             if (joint.isStatic) continue;
-            var mass = 1f;
+            var mass = masses[i];
             var gravity = new Vector2(0, -9.81f * gravityMultiplier);
             var gravitiForce = gravity * mass;
             float speed = joint.velocity.magnitude;
@@ -242,7 +255,8 @@ public class Web : MonoBehaviour
             }
             var projection = GetClosestPointOnConnection(connection, point);
             var vector = point - projection;
-            if (vector.magnitude < minDistance) {
+            if (vector.magnitude < minDistance)
+            {
                 vector = vector.normalized * minDistance;
             }
             point = projection + vector;
@@ -318,5 +332,10 @@ public class Web : MonoBehaviour
 
             return firstHash ^ secondHash;
         }
+    }
+
+    public interface IWebWeightProvider
+    {
+        public bool TryGetPositionAndWightForConnection(Connection connection, out Vector2 position, out float weight);
     }
 }

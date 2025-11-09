@@ -264,7 +264,7 @@ MonoBehaviour:
     second: 2
   stiffness: 50
   damping: 2
-  airResistance: 1
+  airResistance: 0
   gravityMultiplier: 0.1
   extensionResistance: 1
   iterationCount: 1
@@ -691,11 +691,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296297090192259937, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 296297090192259937, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 296297090192259937, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_LocalRotation.y
@@ -707,7 +707,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296297090192259937, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 296297090192259937, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -721,6 +721,10 @@ PrefabInstance:
       propertyPath: web
       value: 
       objectReference: {fileID: 303916588}
+    - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: distanceToHoldWeb
+      value: 0.14
+      objectReference: {fileID: 0}
     - target: {fileID: 2189620046134185988, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: 'legs.Array.data[0]'
       value: 
@@ -740,6 +744,22 @@ PrefabInstance:
     - target: {fileID: 3952918446927074023, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
       propertyPath: m_Name
       value: SpiderMine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221766691101167036, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221766691101167036, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221766691101167036, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4221766691101167036, guid: c79869a9d03bb284081bd84028bac01f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

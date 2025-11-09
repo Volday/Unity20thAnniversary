@@ -172,7 +172,7 @@ Transform:
   m_GameObject: {fileID: 2915921125838381487}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.71214604, y: 0.8010475, z: -0.059879154}
+  m_LocalPosition: {x: -0.71214604, y: 0.6361938, z: -0.059647713}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -203,7 +203,7 @@ Transform:
   m_GameObject: {fileID: 3657020169107478468}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5975187, y: 0.86565256, z: 0.010221052}
+  m_LocalPosition: {x: 0.5975187, y: 0.70079887, z: 0.010452492}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -256,19 +256,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpiderMine
   web: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  spiderBody: {fileID: 4221766691101167036}
   legs:
   - target: {fileID: 9212677189981919478}
     tip: {fileID: 4832719634099466623}
     root: {fileID: 4221766691101167034}
+    currentPosition: {x: 0, y: 0, z: 0}
   - target: {fileID: 4554492245880449968}
     tip: {fileID: 581835638660896787}
     root: {fileID: 4221766691101167038}
+    currentPosition: {x: 0, y: 0, z: 0}
   - target: {fileID: 4071592558325627480}
     tip: {fileID: 5268368858041829726}
     root: {fileID: 4221766691101167032}
+    currentPosition: {x: 0, y: 0, z: 0}
   - target: {fileID: 3986362127641404886}
     tip: {fileID: 4354656090714487224}
     root: {fileID: 4221766691101167020}
+    currentPosition: {x: 0, y: 0, z: 0}
   moveSpeed: 2
   distanceToHoldWeb: 0.2
 --- !u!1 &4202101478942988481
@@ -1630,7 +1635,7 @@ Transform:
   m_GameObject: {fileID: 7656218258903621507}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.031281468, y: 0.87385374, z: -0.51223135}
+  m_LocalPosition: {x: -0.031281468, y: 0.709, z: -0.512}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1719,7 +1724,7 @@ Transform:
   m_GameObject: {fileID: 7874159052918810283}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03194039, y: 0.79864985, z: 0.69468725}
+  m_LocalPosition: {x: 0.03194039, y: 0.63379616, z: 0.6949187}
   m_LocalScale: {x: 0.33333334, y: 0.33333334, z: 0.33333334}
   m_ConstrainProportionsScale: 0
   m_Children: []

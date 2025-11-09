@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Web;
 using Connection = Web.Connection;
 
-public class SpiderMine : MonoBehaviour
+public class SpiderMine : MonoBehaviour, IWebWeightProvider
 {
     public Web web;
 
@@ -12,6 +13,7 @@ public class SpiderMine : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
 
+    public Transform spiderBody;
     public List<Leg> legs;
     private Dictionary<Leg, Vector3> defaultLocalLegPosition;
     private float legLength;
@@ -21,7 +23,6 @@ public class SpiderMine : MonoBehaviour
 
     private bool onWeb;
     private Connection holdingConnection;
-    private float connactionPosition;
     private Vector3 moveVector;
 
     private float velocity;
@@ -32,6 +33,8 @@ public class SpiderMine : MonoBehaviour
 
     void Start()
     {
+        web.webWeightProviders.Add(this);
+
         respawnPosition = transform.position;
         inputActions.FindActionMap("Player").Enable();
         moveAction = InputSystem.actions.FindAction("Move");
@@ -75,6 +78,10 @@ public class SpiderMine : MonoBehaviour
                 connection = holdingConnection;
                 onWeb = true;
             }
+            else
+            {
+                holdingConnection = null;
+            }
         }
 
         if (onWeb)
@@ -101,17 +108,62 @@ public class SpiderMine : MonoBehaviour
             transform.position = respawnPosition;
         }
 
+        UpdateRig();
+    }
+
+    private void UpdateRig()
+    {
         UpdateLegPosition();
+
+        var connection = web.GetClosestConnection(transform.position, out Vector2 projection);
+        Vector3 center = projection;
+        center.z = 0f;
+        var radius = distanceToHoldWeb * 0.9f;
+        var delta = transform.position - center;
+        var underRoot = radius * radius - delta.sqrMagnitude;
+        if (underRoot < 0)
+        {
+            underRoot = 0;
+        }
+        var z = -Mathf.Sqrt(underRoot);
+        var posOnSphere = new Vector3(transform.position.x, transform.position.y, z);
+        Vector3 fromCenter = (posOnSphere - center).normalized;
+        Vector3 right = Vector3.Cross(Vector3.forward, fromCenter);
+        if (right.sqrMagnitude < 0.001f)
+            right = Vector3.Cross(Vector3.right, fromCenter);
+
+        Vector3 forward = Vector3.Cross(fromCenter, right);
+        Quaternion targetRotation = Quaternion.LookRotation(forward, fromCenter);
+        spiderBody.rotation = Quaternion.Slerp(
+            spiderBody.rotation,
+            targetRotation,
+            5 * Time.fixedDeltaTime
+        );
     }
 
     private void UpdateLegPosition()
     {
         foreach (var leg in legs)
         {
-            web.GetClosestConnection(leg.target.position, out var projection);
+            var hint = leg.target.parent.GetChild(1);
+            var hintPosition = hint.position;
+            var hintLocalUp = spiderBody.rotation * (new Vector3(0, hint.localPosition.y, 0) * spiderBody.lossyScale.y);
+            hintPosition -= hintLocalUp;
+            hintPosition.z = 0;
+            hintPosition += moveVector * (legLength / 4f);
+            var connection = web.GetClosestConnection(hintPosition, out var projection);
             if ((leg.root.position - (Vector3)projection).magnitude < legLength)
             {
-                leg.target.position = projection;
+                if ((leg.target.position - (Vector3)projection).magnitude > legLength)
+                {
+                    leg.target.position = projection;
+                    leg.currentPosition = projection;
+                }
+                else
+                {
+                    leg.currentPosition = web.GetClosestPointOnConnection(connection, leg.currentPosition);
+                    leg.target.position = leg.currentPosition;
+                }
             }
             else
             {
@@ -120,11 +172,25 @@ public class SpiderMine : MonoBehaviour
         }
     }
 
+    public bool TryGetPositionAndWightForConnection(Connection connection, out Vector2 position, out float weight)
+    {
+        position = Vector2.zero;
+        weight = 10;
+        if (connection != holdingConnection)
+        {
+            return false;
+        }
+        position = web.GetClosestPointOnConnection(connection, transform.position);
+        return true;
+    }
+
     [Serializable]
     public class Leg
     {
         public Transform target;
         public Transform tip;
         public Transform root;
+        [HideInInspector]
+        public Vector3 currentPosition;
     }
 }
