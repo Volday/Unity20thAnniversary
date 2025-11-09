@@ -327,13 +327,8 @@ public class Web : MonoBehaviour
                 var connection = connections[i];
                 if (IsConnectionStatic(connection))
                 {
-                    Gizmos.color = new Color(0.8f, 0.8f, 0.8f);
+                    Gizmos.DrawLine(joints[connection.first].position, joints[connection.second].position);
                 }
-                else
-                {
-                    Gizmos.color = Color.white;
-                }
-                Gizmos.DrawLine(joints[connection.first].position, joints[connection.second].position);
             }
         }
     }

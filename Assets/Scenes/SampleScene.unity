@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 303916587}
   - component: {fileID: 303916588}
+  - component: {fileID: 303916589}
   m_Layer: 0
   m_Name: Web
   m_TagString: Untagged
@@ -268,6 +269,19 @@ MonoBehaviour:
   gravityMultiplier: 0.1
   extensionResistance: 1
   iterationCount: 1
+--- !u!114 &303916589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303916586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 895b8d14f03fbb740a0564b56b588467, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WebRenderer
+  webLinePrefab: {fileID: 1360486365557825643, guid: b238f583de552f04db1d05039cab8abb, type: 3}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
