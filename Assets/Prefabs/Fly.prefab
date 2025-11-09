@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8920846654656083887}
   - component: {fileID: 6335861289903650023}
   - component: {fileID: 2932861980535040088}
-  - component: {fileID: 1647862332296970751}
   m_Layer: 8
   m_Name: vehicle_rcFlyer_leg_frontLeft
   m_TagString: Untagged
@@ -90,28 +89,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1647862332296970751
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 615488392703632504}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300002, guid: 917e29929631e264c97a7d174b0301e5, type: 3}
 --- !u!1 &4312226968672099894
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +100,6 @@ GameObject:
   - component: {fileID: 2524104740458270844}
   - component: {fileID: 2673630264725086452}
   - component: {fileID: 8461145296846229232}
-  - component: {fileID: 8300834283100391902}
   m_Layer: 8
   m_Name: vehicle_rcFlyer_leg_rearLeft
   m_TagString: Untagged
@@ -202,28 +178,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8300834283100391902
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4312226968672099894}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300004, guid: 917e29929631e264c97a7d174b0301e5, type: 3}
 --- !u!1 &5745009923126647121
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +189,6 @@ GameObject:
   - component: {fileID: 6243408713502783799}
   - component: {fileID: 5138352689474602341}
   - component: {fileID: 8956632965907788869}
-  - component: {fileID: 6037156931265300623}
   m_Layer: 8
   m_Name: vehicle_rcFlyer_leg_frontRight
   m_TagString: Untagged
@@ -314,28 +267,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6037156931265300623
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5745009923126647121}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300006, guid: 917e29929631e264c97a7d174b0301e5, type: 3}
 --- !u!1 &7032592040763696095
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,6 +374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16c0b6390e1a7284b8e90370cb5d1719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fly
+  flyTime: 5
+  flyRadius: 15
 --- !u!1 &7663581146578848454
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +387,6 @@ GameObject:
   - component: {fileID: 7890943921240157287}
   - component: {fileID: 503127790261023404}
   - component: {fileID: 4666548603957058128}
-  - component: {fileID: 4941190280520912781}
   m_Layer: 8
   m_Name: vehicle_rcFlyer_leg_rearRight
   m_TagString: Untagged
@@ -533,25 +465,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4941190280520912781
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7663581146578848454}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 917e29929631e264c97a7d174b0301e5, type: 3}

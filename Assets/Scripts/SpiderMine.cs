@@ -43,6 +43,8 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     private float maxVelosity = 5f;
     private float deathHeight = -20f;
 
+    private Vector3 aimVector;
+
     private Vector3 respawnPosition;
 
     void Start()
@@ -98,11 +100,10 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         var plane = new Plane(Vector3.back, Vector3.zero);
         plane.Raycast(ray, out var dist);
         var aimPosition = ray.origin + ray.direction * dist;
-        directionMarker.LookAt(aimPosition);
+        aimVector = (aimPosition - directionMarker.position).normalized;
         if (attackAction.WasPressedThisFrame() &&
             web.IsConnectionExist(holdingConnection))
         {
-            var aimVector = (aimPosition - transform.position).normalized;
             web.TryConnect(holdingConnection, transform.position, aimVector, 0.3f, out var endPosition);
             webAmount -= (transform.position - (Vector3)endPosition).magnitude * webUsedPerMeter;
         }
@@ -112,6 +113,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
 
     private void FixedUpdate()
     {
+        directionMarker.LookAt(directionMarker.position + aimVector);
         var connection = web.GetClosestConnection(transform.position, out Vector2 projection);
         if (connection != null)
         {
@@ -173,7 +175,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         var connection = web.GetClosestConnection(transform.position, out Vector2 projection);
         Vector3 center = projection;
         center.z = 0f;
-        var radius = distanceToHoldWeb * 0.9f;
+        var radius = distanceToHoldWeb * 0.7f;
         var delta = transform.position - center;
         var underRoot = radius * radius - delta.sqrMagnitude;
         if (underRoot < 0)
@@ -205,7 +207,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
             var hintLocalUp = spiderBody.rotation * (new Vector3(0, hint.localPosition.y, 0) * spiderBody.lossyScale.y);
             hintPosition -= hintLocalUp;
             hintPosition.z = 0;
-            hintPosition += moveVector * (legLength / 4f);
+            hintPosition += (moveVector * 0.8f) * (legLength / 3f);
             var connection = web.GetClosestConnection(hintPosition, out var projection);
             if ((leg.root.position - (Vector3)projection).magnitude < legLength)
             {
