@@ -8,15 +8,23 @@ public class FlyManager : MonoBehaviour
     public Web web;
 
     public float flghtsPerMinute = 20f;
-
+    private float initialFlghtsPerMinute;
 
     [SerializeField]
     private List<Vector3> points;
 
     private void Start()
     {
+        initialFlghtsPerMinute = flghtsPerMinute;
+        flghtsPerMinute *= 2;
         LaunchFly(new Vector3(-6.84f, -1.745f, 0f));
         StartCoroutine(FlyLouncherCoroutine());
+    }
+
+    private void Update()
+    {
+        flghtsPerMinute -= (initialFlghtsPerMinute / 60f) * Time.deltaTime;
+        flghtsPerMinute = Mathf.Max(flghtsPerMinute, initialFlghtsPerMinute);
     }
 
     private void LaunchFly(Vector3 target)

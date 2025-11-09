@@ -17,6 +17,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     private InputAction attackAction;
 
     public Transform directionMarker;
+    public Transform closestFlyMarker;
     public Transform spiderBody;
     public List<Leg> legs;
     private Dictionary<Leg, Vector3> defaultLocalLegPosition;
@@ -25,12 +26,14 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     public float moveSpeed = 1;
     public float distanceToHoldWeb = 1;
 
+    public float webResForFly = 0.3f;
     public float webUsedPerMeter = 0.1f;
     public float webResDecayTime = 60;
     public float webAmount = 1;
     public Slider webResUi;
     public Image endGameScreen;
     private TextMeshProUGUI endGameText;
+    private int eatedFlyCount;
     private float reloadFadingTime = 3f;
     private float reloadingTime = 0;
     private float timePlayed = -1;
@@ -44,6 +47,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
     private float deathHeight = -20f;
 
     private Vector3 aimVector;
+    private Vector3 closestFlyVector;
 
     private Vector3 respawnPosition;
 
@@ -77,7 +81,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
             if (timePlayed == -1)
             {
                 timePlayed = (int)Time.timeSinceLevelLoad;
-                endGameText.text = $"Out of web.\nYou lived for {timePlayed} seconds";
+                endGameText.text = $"Out of web\nYou ate {eatedFlyCount} flies\nAnd lived for {timePlayed} seconds\n ";
             }
             reloadingTime += Time.deltaTime;
             var panelColor = endGameScreen.color;
@@ -89,7 +93,11 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
 
             if (reloadingTime >= reloadFadingTime)
             {
-                SceneManager.LoadScene("Game");
+                endGameText.text = $"Out of web\nYou ate {eatedFlyCount} flies\nAnd lived for {timePlayed} seconds\nLKM to restart";
+                if (attackAction.WasPressedThisFrame())
+                {
+                    SceneManager.LoadScene("Game");
+                }
             }
             return;
         }
@@ -107,13 +115,52 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
             web.TryConnect(holdingConnection, transform.position, aimVector, 0.3f, out var endPosition);
             webAmount -= (transform.position - (Vector3)endPosition).magnitude * webUsedPerMeter;
         }
+
+        webResDecayTime -= ((webResDecayTime * 0.3f) / 60f) * Time.deltaTime;
+        webResDecayTime = Mathf.Max(webResDecayTime, 0.01f);
         webAmount -= (1 / webResDecayTime) * Time.deltaTime;
+        TryEatFly();
         webAmount = Mathf.Clamp01(webAmount);
+    }
+
+    private void TryEatFly()
+    {
+        Fly closestFly = null;
+        float minDistance = float.MaxValue;
+        for (int i = 0; i < web.webWeightProviders.Count; i++)
+        {
+            var onWebObject = web.webWeightProviders[i];
+            if (onWebObject is Fly { } fly)
+            {
+                var distance = (transform.position - fly.transform.position).magnitude;
+                if (distance <= 0.5f)
+                {
+                    fly.Die();
+                    webAmount += webResForFly;
+                    eatedFlyCount++;
+                }
+                else if (closestFly == null ||
+                    minDistance > distance)
+                {
+                    closestFly = fly;
+                    minDistance = distance;
+                }
+            }
+        }
+        if (closestFly == null)
+        {
+            closestFlyMarker.gameObject.SetActive(false);
+        }
+        else {
+            closestFlyMarker.gameObject.SetActive(true);
+            closestFlyVector = (closestFly.transform.position - closestFlyMarker.position).normalized;
+        }
     }
 
     private void FixedUpdate()
     {
         directionMarker.LookAt(directionMarker.position + aimVector);
+        closestFlyMarker.LookAt(closestFlyMarker.position + closestFlyVector);
         var connection = web.GetClosestConnection(transform.position, out Vector2 projection);
         if (connection != null)
         {

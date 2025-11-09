@@ -173,7 +173,7 @@ public class Web : MonoBehaviour
             return false;
         }
         connection = newConnection;
-        var length = (first.position - second.position).magnitude;
+        var length = (first.position - second.position).magnitude * 0.8f;
         connection.SetLength(length);
         connections.Add(connection);
         return true;
@@ -231,6 +231,27 @@ public class Web : MonoBehaviour
         Connection closest = null;
         foreach (var connection in connections)
         {
+            var projectionOnLineSegment = GetClosestPointOnConnection(connection, point);
+            if (closest == null ||
+                (projectionOnLineSegment - point).sqrMagnitude < (projection - point).sqrMagnitude)
+            {
+                closest = connection;
+                projection = projectionOnLineSegment;
+            }
+        }
+        return closest;
+    }
+
+    public Connection GetClosestNonStaticConnection(Vector2 point, out Vector2 projection)
+    {
+        projection = Vector2.zero;
+        Connection closest = null;
+        foreach (var connection in connections)
+        {
+            if (IsConnectionStatic(connection))
+            {
+                continue;
+            }
             var projectionOnLineSegment = GetClosestPointOnConnection(connection, point);
             if (closest == null ||
                 (projectionOnLineSegment - point).sqrMagnitude < (projection - point).sqrMagnitude)
