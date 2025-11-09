@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static Web;
 using Connection = Web.Connection;
 
@@ -21,6 +25,16 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
 
     public float moveSpeed = 1;
     public float distanceToHoldWeb = 1;
+
+    public float webUsedPerMeter = 0.1f;
+    public float webResDecayTime = 60;
+    public float webAmount = 1;
+    public Slider webResUi;
+    public Image endGameScreen;
+    private TextMeshProUGUI endGameText;
+    private float reloadFadingTime = 3f;
+    private float reloadingTime = 0;
+    private float timePlayed = -1;
 
     private bool onWeb;
     private Connection holdingConnection;
@@ -49,10 +63,35 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
         var leg1 = legs[0].tip;
         var leg1Parent = leg1.parent;
         legLength = (leg1.position - leg1Parent.position).magnitude + (leg1Parent.position - leg1Parent.parent.position).magnitude;
+
+        endGameText = endGameScreen.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     void Update()
     {
+        webResUi.value = webAmount;
+        if (webAmount == 0)
+        {
+            moveVector = Vector3.Slerp(moveVector, Vector3.zero, Time.deltaTime);
+            if (timePlayed == -1) {
+                timePlayed = (int)Time.timeSinceLevelLoad;
+                endGameText.text = $"Out of web.\nYou lived for {timePlayed} secconds";
+            }
+            reloadingTime += Time.deltaTime;
+            var panelColor = endGameScreen.color;
+            panelColor.a = reloadingTime / reloadFadingTime;
+            endGameScreen.color = panelColor;
+            var textColor = endGameText.color;
+            textColor.a = reloadingTime / reloadFadingTime;
+            endGameText.color = textColor;
+
+            if (reloadingTime >= reloadFadingTime)
+            {
+                SceneManager.LoadScene("Game");
+            }
+            return;
+        }
+
         moveVector = moveAction.ReadValue<Vector2>();
 
         var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
@@ -64,8 +103,11 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
             web.IsConnectionExist(holdingConnection))
         {
             var aimVector = (aimPosition - transform.position).normalized;
-            web.TryConnect(holdingConnection, transform.position, aimVector, 0.3f);
+            web.TryConnect(holdingConnection, transform.position, aimVector, 0.3f, out var endPosition);
+            webAmount -= (transform.position - (Vector3)endPosition).magnitude * webUsedPerMeter;
         }
+        webAmount -= (1 / webResDecayTime) * Time.deltaTime;
+        webAmount = Mathf.Clamp01(webAmount);
     }
 
     private void FixedUpdate()

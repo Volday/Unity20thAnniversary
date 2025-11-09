@@ -268,8 +268,9 @@ public class Web : MonoBehaviour
         return point;
     }
 
-    public bool TryConnect(Connection startConnection, Vector2 startPosition, Vector2 direction, float minDistance)
+    public bool TryConnect(Connection startConnection, Vector2 startPosition, Vector2 direction, float minDistance, out Vector2 endPosition)
     {
+        endPosition = Vector2.zero;
         if (IsConnectionStatic(startConnection))
         {
             startPosition = GetClosestPointOnConnection(startConnection, startPosition);
@@ -310,11 +311,17 @@ public class Web : MonoBehaviour
         {
             return false;
         }
+        endPosition = closestPosition;
         var startJoint = CreateJoint(startPosition, IsConnectionStatic(startConnection));
         InsertJoint(startConnection, startJoint);
-        var endJoint = CreateJoint(closestPosition, IsConnectionStatic(closestConnection));
+        var endJoint = CreateJoint(endPosition, IsConnectionStatic(closestConnection));
         InsertJoint(closestConnection, endJoint);
-        TryCrateConnction(startJoint, endJoint, out _);
+        TryCrateConnction(startJoint, endJoint, out var newConnection);
+        if (IsConnectionStatic(newConnection))
+        {
+            var middleJoint = CreateJoint((startPosition + endPosition) / 2, false);
+            InsertJoint(newConnection, middleJoint);
+        }
         return true;
     }
 
