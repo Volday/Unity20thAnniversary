@@ -93,7 +93,7 @@ public class SpiderMine : MonoBehaviour, IWebWeightProvider
 
             if (reloadingTime >= reloadFadingTime)
             {
-                endGameText.text = $"Out of web\nYou ate {eatedFlyCount} flies\nAnd lived for {timePlayed} seconds\nLKM to restart";
+                endGameText.text = $"Out of web\nYou ate {eatedFlyCount} flies\nAnd lived for {timePlayed} seconds\nLMB to restart";
                 if (attackAction.WasPressedThisFrame())
                 {
                     SceneManager.LoadScene("Game");
